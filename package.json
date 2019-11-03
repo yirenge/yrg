@@ -1,0 +1,23 @@
+{
+  "name": "yrg",
+  "version": "1.0.0",
+  "description": "yirenge is a clothing platform for designing and selling.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yirenge/yrg.git"
+  },
+  "author": "brainee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yirenge/yrg/issues"
+  },
+  "homepage": "https://github.com/yirenge/yrg#readme",
+  "dependencies": {
+    "ejs": "^2.7.1",
+    "express": "^4.17.1"
+  }
+}
