@@ -16,3 +16,6 @@ netstat -aon | findstr :80
 tasklist|findstr “4300”
 
 ### nginx 1.17.5在window上proxy_pass无效，更换为1.16.1终于工作了。
+
+### ref
+https://github.com/xuguangwen/nodeStation
