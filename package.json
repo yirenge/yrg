@@ -2,7 +2,7 @@
   "name": "yrg",
   "version": "1.0.0",
   "description": "yirenge is a clothing platform for designing and selling.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
