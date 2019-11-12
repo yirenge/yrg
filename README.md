@@ -15,6 +15,9 @@ netstat -aon | findstr :80
 2. 根据所查进程PID=4，使用如下命令：
 tasklist|findstr “4300”
 
+3. 启动项设置
+   msconfig
+
 ### nginx 1.17.5在window上proxy_pass无效，更换为1.16.1终于工作了。
 
 ### ref
