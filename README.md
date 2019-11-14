@@ -18,6 +18,8 @@ tasklist|findstr “4300”
 3. 启动项设置
    msconfig
 
+4. npm registry,设置为淘宝之后，立马快了
+   config get registry https://registry.npm.taobao.org/
 ### nginx 1.17.5在window上proxy_pass无效，更换为1.16.1终于工作了。
 
 ### ref

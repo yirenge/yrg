@@ -1,5 +1,5 @@
 const express=require('express');
-const common=require('../../libs/common');
+const common=require('../../src/libs/common');
 const mysql=require('mysql');
 
 var db=mysql.createPool({host: 'localhost', user: 'root', password: 'root', database: 'web'});

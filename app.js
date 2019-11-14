@@ -1,30 +1,45 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-var myconfig=require("./src/myconfig");
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var adminRouter = require('./routes/admin');
+let createError = require('http-errors');
+let express = require('express');
+let path = require('path');
+const cookieParser = require('cookie-parser');
+const cookieSession=require('cookie-session');
+const logger = require('morgan');
+const consolidate=require('consolidate');
 
 
-var app = express();
+let myconfig=require("./src/myconfig");
+let app = express();
+let multer=require('multer');
+let multerObj=multer({dest: myconfig.uploadDir});
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
+//1.middlewares
 app.use(logger('dev'));
 app.use(express.json());
+app.use(multerObj.any());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+(function (){
+  var keys=[];
+  for(var i=0;i<myconfig.session.count;i++){
+    keys[i]='a_'+Math.random();
+  }
+  app.use(cookieSession({
+    name: 'sess_id',
+    keys: keys,
+    maxAge: 20*60*1000  //20min
+  }));
+})();
+app.use(myconfig.baseUrl,express.static(path.join(__dirname, 'public/yrg')));
 
-app.use(myconfig.baseUrl +'/', indexRouter);
-app.use(myconfig.baseUrl +'/users', usersRouter);
-app.use(myconfig.baseUrl +'/admin', adminRouter);
+//2.routes
+// app.use('/', indexRouter);
+app.use(myconfig.baseUrl,require('./route/index')());
+
+
+//3.模板
+app.set('views', 'template');
+app.engine('html', consolidate.ejs);
+app.set('view engine', 'html');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -39,10 +54,10 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error.ejs');
 });
 
-var server=app.listen(5388, function () {
+let server=app.listen(myconfig.port, function () {
   console.log('Listening on '+server.address().port);
 });
 
