@@ -1,6 +1,8 @@
 const express=require('express');
 const mysql=require('mysql');
-var db=mysql.createPool({host: 'localhost', user: 'root', password: 'root', database: 'web'});
+const myconfig=require('../../../src/myconfig');
+const db = mysql.createPool(myconfig.mysql);
+
 module.exports=function (){
   var router=express.Router();
   router.get('/', (req, res)=>{
@@ -20,7 +22,7 @@ module.exports=function (){
           if(data[0].password==password){
             //成功
             req.session['user_id']=data[0].ID;
-            res.redirect('/');
+            res.redirect(mysql.baseUrl+'/user/');
           }else{
             res.status(400).send('this password is incorrect').end();
           }

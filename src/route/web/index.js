@@ -1,6 +1,6 @@
 const express = require('express');
 const mysql = require('mysql');
-const myconfig=require('../../src/myconfig');
+const myconfig=require('../../myconfig');
 var db = mysql.createPool(myconfig.mysql);
 
 module.exports = function () {

@@ -1,8 +1,8 @@
 const express=require('express');
-const common=require('../../src/libs/common');
+const myconfig=require('../../../src/myconfig');
 const mysql=require('mysql');
 
-var db=mysql.createPool({host: 'localhost', user: 'root', password: 'root', database: 'web'});
+const db = mysql.createPool(myconfig.mysql);
 
 module.exports=function (){
   var router=express.Router();
@@ -36,7 +36,7 @@ module.exports=function (){
             console.error(err);
             res.status(500).send('database error').end();
           }else{
-            res.redirect('/admin/userlist');
+            res.redirect(myconfig.baseUrl+'/admin/userlist');
           }
         });
         break;

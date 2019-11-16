@@ -1,12 +1,12 @@
 const express=require('express');
-const common=require('../../src/libs/common');
+const myconfig=require('../../../src/myconfig');
 
 module.exports=function (){
   var router=express.Router();
   //检查登录状态
   router.use((req, res, next)=>{
     if(!req.session['admin_id'] && req.url!='/login'){ //没有登录
-      res.redirect('/admin/login');
+      res.redirect(myconfig.baseUrl+'/admin/login');
     }else{
       next();
     }

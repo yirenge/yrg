@@ -1,7 +1,7 @@
 const express=require('express');
 const mysql=require('mysql');
-
-var db=mysql.createPool({host: 'localhost', user: 'root', password: 'root', database: 'web'});
+const myconfig=require('../../../src/myconfig');
+const db = mysql.createPool(myconfig.mysql);
 
 module.exports=function (){
   var router=express.Router();
@@ -33,7 +33,7 @@ module.exports=function (){
             console.error(err);
             res.status(500).send('database error').end();
           }else{
-            res.redirect('/admin/banners');
+            res.redirect(myconfig.baseUrl+'/admin/banners');
           }
         });
         break;
@@ -63,7 +63,7 @@ module.exports=function (){
               console.error(err);
               res.status(500).send('database error').end();
             }else{
-              res.redirect('/admin/banners');
+              res.redirect(myconfig.baseUrl+'/admin/banners');
             }
           }
         );
@@ -73,7 +73,7 @@ module.exports=function (){
             console.error(err);
             res.status(500).send('database error').end();
           }else{
-            res.redirect('/admin/banners');
+            res.redirect(myconfig.baseUrl+'/admin/banners');
           }
         });
       }

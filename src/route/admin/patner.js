@@ -1,9 +1,8 @@
-//这里是新闻动态
 const express=require('express');
-const common=require('../../src/libs/common');
+const myconfig=require('../../../src/myconfig');
 const mysql=require('mysql');
 
-var db=mysql.createPool({host: 'localhost', user: 'root', password: 'root', database: 'web'});
+const db = mysql.createPool(myconfig.mysql);
 
 const pathLib=require('path');
 const fs=require('fs');
@@ -14,25 +13,25 @@ module.exports=function (){
   router.get('/', function (req, res){
     switch(req.query.act){
       case 'del':
-        db.query(`SELECT * FROM news_table WHERE ID=${req.query.id}`, (err, data)=>{
+        db.query(`SELECT * FROM patner_table WHERE ID=${req.query.id}`, (err, data)=>{
           if(err){
             console.error(err);
             res.status(500).send('database error').end();
           }else{
             if(data.length==0){
-              res.status(404).send('no this news').end();
+              res.status(404).send('no this patner').end();
             }else{
               fs.unlink('static/upload/'+data[0].src, (err)=>{
                 if(err){
                   console.error(err);
                   res.status(500).send('file opration error').end();
                 }else{
-                  db.query(`DELETE FROM news_table WHERE ID=${req.query.id}`, (err, data)=>{
+                  db.query(`DELETE FROM patner_table WHERE ID=${req.query.id}`, (err, data)=>{
                     if(err){
                       console.error(err);
                       res.status(500).send('database error').end();
                     }else{
-                      res.redirect('/admin/news');
+                      res.redirect(myconfig.baseUrl+'/admin/patner');
                     }
                   });
                 }
@@ -42,42 +41,38 @@ module.exports=function (){
         });
         break;
       case 'mod':
-        db.query(`SELECT * FROM news_table WHERE ID=${req.query.id}`, (err, data)=>{
+        db.query(`SELECT * FROM patner_table WHERE ID=${req.query.id}`, (err, data)=>{
           if(err){
             console.error(err);
             res.status(500).send('database error').end();
           }else if(data.length==0){
-            res.status(404).send('no this news').end();
+            res.status(404).send('no this patner').end();
           }else{
-            db.query(`SELECT * FROM news_table`, (err, news)=>{
+            db.query(`SELECT * FROM patner_table`, (err, patners)=>{
               if(err){
                 console.error(err);
                 req.status(500).send('database error').end();
               }else{
-                res.render('admin/news.ejs', {news, mod_data: data[0]});
+                res.render('admin/patner.ejs', {patners, mod_data: data[0]});
               }
             });
           }
         });
         break;
       default:
-        db.query(`SELECT * FROM news_table`, (err, news)=>{
+        db.query(`SELECT * FROM patner_table`, (err, patners)=>{
           if(err){
             console.error(err);
             req.status(500).send('database error').end();
           }else{
-            res.render('admin/news.ejs', {news});
+            res.render('admin/patner.ejs', {patners});
           }
         });
     }
   });
   router.post('/', function (req, res){
-    var title=req.body.title;
-    var summary=req.body.summary;
-    var content=req.body.content;
-    var keyword=req.body.keyword;
-    var post_time=req.body.post_time;
-    var view=req.body.view;
+    var name=req.body.name;
+    var description=req.body.description;
 
     if(req.files[0]){
       var ext=pathLib.parse(req.files[0].originalname).ext;
@@ -98,7 +93,7 @@ module.exports=function (){
         }else{
           if(req.body.mod_id){  //修改
             //先删除老的
-            db.query(`SELECT * FROM news_table WHERE ID=${req.body.mod_id}`, (err, data)=>{
+            db.query(`SELECT * FROM patner_table WHERE ID=${req.body.mod_id}`, (err, data)=>{
               if(err){
                 console.error(err);
                 res.status(500).send('database error').end();
@@ -110,15 +105,15 @@ module.exports=function (){
                     console.error(err);
                     res.status(500).send('file opration error').end();
                   }else{
-                    db.query(`UPDATE news_table SET \
-                      title='${title}', summary='${summary}',content='${content}' \
-                      src='${newFileName}', keyword='${keyword}',post_time='${post_time}',view='${view}'\
+                    db.query(`UPDATE patner_table SET \
+                      name='${name}', description='${description}', \
+                      src='${newFileName}' \
                       WHERE ID=${req.body.mod_id}`, (err)=>{
                         if(err){
                           console.error(err);
                           res.status(500).send('database error').end();
                         }else{
-                          res.redirect('/admin/news');
+                          res.redirect(myconfig.baseUrl+'/admin/patner');
                         }
                       });
                   }
@@ -126,14 +121,14 @@ module.exports=function (){
               }
             });
           }else{                //添加
-            db.query(`INSERT INTO news_table \
-            (title, summary,content,src,keyword,post_time,view)
-            VALUES('${title}', '${summary}','${content}','${newFileName}','${keyword}','${post_time}', '${view}')`, (err, data)=>{
+            db.query(`INSERT INTO patner_table \
+            (name, description, src)
+            VALUES('${name}', '${description}', '${newFileName}')`, (err, data)=>{
               if(err){
                 console.error(err);
                 res.status(500).send('database error').end();
               }else{
-                res.redirect('/admin/news');
+                res.redirect(myconfig.baseUrl+'/admin/patner');
               }
             });
           }
@@ -142,25 +137,25 @@ module.exports=function (){
     }else{
       if(req.body.mod_id){  //修改
         //直接改
-        db.query(`UPDATE news_table SET \
-          title='${title}', summary='${summary}',content='${content}',keyword='${keyword}',post_time='${post_time}',view='${view}' \
+        db.query(`UPDATE patner_table SET \
+          name='${name}', description='${description}' \
           WHERE ID=${req.body.mod_id}`, (err)=>{
             if(err){
               console.error(err);
               res.status(500).send('database error').end();
             }else{
-              res.redirect('/admin/news');
+              res.redirect(myconfig.baseUrl+'/admin/patner');
             }
           });
       }else{                //添加
-        db.query(`INSERT INTO news_table \
-        (title, summary,content,src,keyword,post_time,view)
-        VALUES('${title}', '${summary}','${content}','${newFileName}','${keyword}','${post_time}', '${view}')`, (err, data)=>{
+        db.query(`INSERT INTO patner_table \
+        (name, description, src)
+        VALUES('${name}', '${description}', '${newFileName}')`, (err, data)=>{
           if(err){
             console.error(err);
             res.status(500).send('database error').end();
           }else{
-            res.redirect('/admin/news');
+            res.redirect(myconfig.baseUrl+'/admin/patner');
           }
         });
       }

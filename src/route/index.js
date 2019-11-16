@@ -1,6 +1,6 @@
 
 const express=require('express');
-const common=require('../src/libs/common');
+// const common=require('../src/libs/common');
 
 module.exports=function (){
   var router=express.Router();

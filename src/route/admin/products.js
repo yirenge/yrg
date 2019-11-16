@@ -1,8 +1,8 @@
 //这里是客户案例，也是产品product
 const express=require('express');
-const common=require('../../src/libs/common');
+const myconfig=require('../../../src/myconfig');
 const mysql=require('mysql');
-var db=mysql.createPool({host: 'localhost', user: 'root', password: 'root', database: 'web'});
+const db = mysql.createPool(myconfig.mysql);
 const pathLib=require('path');
 const fs=require('fs');
 module.exports=function (){
@@ -28,7 +28,7 @@ module.exports=function (){
                       console.error(err);
                       res.status(500).send('database error').end();
                     }else{
-                      res.redirect('/admin/products');
+                      res.redirect(myconfig.baseUrl+'/admin/products');
                     }
                   });
                 }
@@ -112,7 +112,7 @@ module.exports=function (){
                           console.error(err);
                           res.status(500).send('database error').end();
                         }else{
-                          res.redirect('/admin/products');
+                          res.redirect(myconfig.baseUrl+'/admin/products');
                         }
                       });
                   }
@@ -127,7 +127,7 @@ module.exports=function (){
                 console.error(err);
                 res.status(500).send('database error').end();
               }else{
-                res.redirect('/admin/products');
+                res.redirect(myconfig.baseUrl+'/admin/products');
               }
             });
           }
@@ -143,7 +143,7 @@ module.exports=function (){
               console.error(err);
               res.status(500).send('database error').end();
             }else{
-              res.redirect('/admin/products');
+              res.redirect(myconfig.baseUrl+'/admin/products');
             }
           });
       }else{                //添加
@@ -154,7 +154,7 @@ module.exports=function (){
             console.error(err);
             res.status(500).send('database error').end();
           }else{
-            res.redirect('/admin/products');
+            res.redirect(myconfig.baseUrl+'/admin/products');
           }
         });
       }

@@ -30,14 +30,15 @@ app.use(cookieParser());
   }));
 })();
 app.use(myconfig.baseUrl,express.static(path.join(__dirname, 'public/yrg')));
+app.use("/files",express.static(path.join(__dirname, 'public/res')));
 
 //2.routes
 // app.use('/', indexRouter);
-app.use(myconfig.baseUrl,require('./route/index')());
+app.use(myconfig.baseUrl+"/",require('./src/route/index')());
 
 
 //3.模板
-app.set('views', 'template');
+app.set('views', 'src/template');
 app.engine('html', consolidate.ejs);
 app.set('view engine', 'html');
 
